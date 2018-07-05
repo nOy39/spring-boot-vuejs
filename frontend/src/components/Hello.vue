@@ -14,8 +14,10 @@
       <li><router-link :to="{ name: 'Bootstrap' }" exact target="_blank">/bootstrap</router-link></li>
       <li>HowTo to interact with the Spring Boot database backend:</li>
       <li><router-link :to="{ name: 'User' }" exact target="_blank">/user</router-link></li>
-      <li>Тестовый полигон:</li>
+      <li>Тестовый полигон FE:</li>
       <li><router-link :to="{ name: 'TestField' }" exact target="_blank">/poligon</router-link></li>
+      <li>Тестовый полигон BE:</li>
+      <li><router-link :to="{ name: 'TestBack' }" exact target="_blank">/boligon</router-link></li>
     </ul>
   </div>
 </template>

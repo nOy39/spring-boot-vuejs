@@ -1,12 +1,16 @@
 package de.jonashackt.springbootvuejs.controller;
 
+import de.jonashackt.springbootvuejs.domain.Message;
 import de.jonashackt.springbootvuejs.domain.User;
+import de.jonashackt.springbootvuejs.repository.MessageRepo;
 import de.jonashackt.springbootvuejs.repository.UserRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController()
 @RequestMapping("/api")
@@ -18,6 +22,9 @@ public class BackendController {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private MessageRepo messageRepo;
 
     @RequestMapping(path = "/hello")
     public @ResponseBody String sayHello() {
@@ -42,4 +49,17 @@ public class BackendController {
         return userRepository.findById(id).get();
     }
 
+    @GetMapping(value = "/inbox")
+    public @ResponseBody List<Message> getAllMessages() {
+        LOG.info("Reading all message from database.");
+        return messageRepo.findAll();
+    }
+
+    @PostMapping(value = "/inbox/{id}")
+    public @ResponseBody Message setMessageStatus(@PathVariable("id") long id) {
+        LOG.info("Reading message with id " + id + " from database.");
+        Message message = messageRepo.findById(id).get();
+        message.setRead(true);
+        return messageRepo.save(message);
+    }
 }
