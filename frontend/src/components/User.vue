@@ -11,10 +11,12 @@
 
     <div v-if="showResponse"><h6>User created with Id: {{ response }}</h6></div>
 
-    <button v-if="showResponse" @click="retrieveUser()">Retrieve user {{user.id}} data from database</button>
-
-    <h4 v-if="showRetrievedUser">Retrieved User {{retrievedUser.firstName}} {{retrievedUser.lastName}}</h4>
-
+    <template>
+      <b-table striped hover :items="users" :fields="fields">
+        <span slot="html" slot-scope="data" v-html="data.value">
+      </span>
+      </b-table>
+    </template>
   </div>
 </template>
 
@@ -36,9 +38,18 @@
         },
         showResponse: false,
         retrievedUser: {},
-        showRetrievedUser: false
+        showRetrievedUser: false,
+        users: [],
+        fields: ['id',
+          'firstName',
+          'lastName',
+          'manage']
       }
     },
+    created: function () {
+      this.fetchUsers();
+    },
+
     methods: {
       // Fetches posts when the component is created.
       createUser () {
@@ -49,26 +60,27 @@
         AXIOS.post(`/user`, params)
           .then(response => {
             // JSON responses are automatically parsed.
-            this.response = response.data
-            this.user.id = response.data
-            console.log(response.data)
-            this.showResponse = true
+            this.response = response.data;
+            this.user.id = response.data;
+            console.log(response.data);
+            this.showResponse = true;
+            this.fetchUsers()
           })
           .catch(e => {
             this.errors.push(e)
           })
       },
-      retrieveUser () {
-        AXIOS.get(`/user/` + this.user.id)
-          .then(response => {
-            // JSON responses are automatically parsed.
-            this.retrievedUser = response.data
-            console.log(response.data)
-            this.showRetrievedUser = true
-          })
+      fetchUsers() {
+        AXIOS.get(`/user`).then(response => {
+          this.users = response.data;
+          console.log(response.data)
+        })
           .catch(e => {
             this.errors.push(e)
           })
+      },
+      deleteUser() {
+
       }
     }
   }

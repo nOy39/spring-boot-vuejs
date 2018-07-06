@@ -43,6 +43,14 @@ public class BackendController {
         return user.getId();
     }
 
+    @RequestMapping(path = "/user", method = RequestMethod.GET)
+    public @ResponseBody
+    Iterable<User> getAllUser() {
+        LOG.info("Reading all users from database.");
+        return userRepository.findAll();
+    }
+
+
     @GetMapping(path="/user/{id}")
     public @ResponseBody User getUserById(@PathVariable("id") long id) {
         LOG.info("Reading user with id " + id + " from database.");
